@@ -6,7 +6,6 @@ var dbConfig = require('./db_config');
 
 var express = require('express');
 var Sequelize = require('sequelize');
-var bodyParser = require('body-parser');
 
 var app = express();
 var sequelize = new Sequelize(dbConfig.protocol);
@@ -16,9 +15,9 @@ var userModel = user.define(sequelize);
 
 sequelize.sync();
 
-app.use(bodyParser.urlencoded({extened:false}));
+app.use(require('body-parser').urlencoded({ extended:true }));
 app.use(function(req, res, next){
-    req.model = {}
+    req.model = {};
     req.model.user = userModel;
     next();
 });
@@ -30,8 +29,7 @@ app.get('/', function(req, res){
 app.post('/user', function(req, res){
     var email = req.body.email;
     var password = req.body.password;
-
-    console.log(req.model.user);
+    
     var User = req.model.user;
     User.create({
         email : email,
